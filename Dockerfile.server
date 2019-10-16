@@ -5,7 +5,7 @@ ENV GO111MODULE=on
 COPY ./ /go/src/github.com/meyskens/mvm-sint-predict
 WORKDIR /go/src/github.com/meyskens/mvm-sint-predict
 
-RUN go build -o sint-server ./cmd/sint-server/
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o sint-server ./cmd/sint-server/
 
 FROM alpine:latest
 
