@@ -16,8 +16,8 @@ var (
 
 	rootCmd = &cobra.Command{
 		Use:   "sint-server",
-		Short: "TODO",
-		Long:  `TODO`,
+		Short: "sint-server is the server for mvm-sint-predict",
+		Long:  `sint-server is the server for mvm-sint-predict. It is responsible for handing data sent over gRPC.`,
 	}
 )
 
