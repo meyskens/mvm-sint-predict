@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package sint;
+
+option go_package = "pb";
+
+service Sint {
+  rpc GetFrequency (FrequencyRequest) returns (FrequencyReply) {}
+  rpc GetChildrenCount (ChildrenCountRequest) returns (ChildrenCountReply) {}
+}
+
+// Inspired on https://github.com/googleapis/googleapis/blob/master/google/type/date.proto
+message Date {
+  // Year of date. Must be from 1 to 9999, or 0 if specifying a date without
+  // a year.
+  int32 year = 1;
+
+  // Month of year. Must be from 1 to 12, or 0 if specifying a year without a
+  // month and day.
+  int32 month = 2;
+
+  // Day of month. Must be from 1 to 31 and valid for the year and month, or 0
+  // if specifying a year by itself or a year and month where the day is not
+  // significant.
+  int32 day = 3;
+}
+
+
+message FrequencyRequest {
+  message Visit {
+    string id = 1;
+    Date date = 2;
+  }
+
+  repeated Visit visits = 3;
+}
+
+message Frequency {
+  string id = 1;
+  uint64 timesVisited = 2;
+}
+
+message FrequencyReply {
+  repeated Frequency frequencies = 1;
+}
+
+message FamilyComposition {
+  message Child {
+      uint32 age = 1;
+      string gender = 2;
+  }
+
+  string id = 3;
+  repeated Child children = 4;
+}
+
+message ChildrenCountRequest {
+  repeated FamilyComposition familyCompositions = 1;
+  repeated Frequency frequency = 2;
+  uint64 frequencyThreshold = 3;
+}
+
+message ChildrenCountReply {
+    message Count {
+      uint32 age = 1;
+      string gender = 2;
+      uint64 count = 3;
+    }
+
+    repeated Count counts = 4;
+}
