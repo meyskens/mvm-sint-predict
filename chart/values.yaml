@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: maartje/mvm-sint-predict-server
-  tag: dev-TODO
+  tag: dev-2d0e788
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
