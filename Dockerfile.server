@@ -1,0 +1,15 @@
+FROM golang:1.13 as build
+
+ENV GO111MODULE=on
+
+COPY ./ /go/src/github.com/meyskens/mvm-sint-predict
+WORKDIR /go/src/github.com/meyskens/mvm-sint-predict
+
+RUN go build -o sint-server ./cmd/sint-server/
+
+FROM alpine:latest
+
+COPY --from=build /go/src/github.com/meyskens/mvm-sint-predict/sint-server /usr/local/bin
+
+ENTRYPOINT ["sint-server"]
+CMD ["serve"]

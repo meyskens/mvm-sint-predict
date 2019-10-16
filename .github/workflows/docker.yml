@@ -1,0 +1,30 @@
+name: Docker Image Publish
+
+on:
+  push:
+    branches:
+      - master
+    release: {}
+
+jobs:
+  build-server:
+    runs-on: ubuntu-latest
+    name: Build and Publish server image
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile.server --tag maartje/mvm-sint-predict-server:dev-${GITHUB_SHA:0:7}
+      
+    - name: Log in to registry
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login docker.pkg.github.com -u "meyskens" --password-stdin
+
+    - name: Push image
+      run: docker push maartje/mvm-sint-predict-server:dev-${GITHUB_SHA:0:7}
+
+    - name: Push tagged image
+      if: github.event_name == 'release'
+      run: |
+        docker tag maartje/mvm-sint-predict-server:dev-${GITHUB_SHA:0:7} maartje/mvm-sint-predict-server:$GITHUB_REF
+        docker push maartje/mvm-sint-predict-server:$GITHUB_REF
