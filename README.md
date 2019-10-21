@@ -10,3 +10,6 @@ You might find the setup weird to be using gRPC, but everything has its reason. 
 
 ## Usage
 TODO
+
+### Fixtures
+This repo comes with a few fixtures to present how we export our data from ZOHO, this is based on scrambeled data from the actual data, for this reason you might see weird things here.
