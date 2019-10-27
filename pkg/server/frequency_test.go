@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/meyskens/mvm-sint-predict/pb"
@@ -139,6 +140,11 @@ func TestSintReplyServer_GetFrequency(t *testing.T) {
 				t.Errorf("SintReplyServer.GetFrequency() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
+
+			// sort for DeepEqual
+			sort.Slice(got.Frequencies, func(i, j int) bool { return got.Frequencies[i].Id < got.Frequencies[j].Id })
+			sort.Slice(tt.want.Frequencies, func(i, j int) bool { return tt.want.Frequencies[i].Id < tt.want.Frequencies[j].Id })
+
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("SintReplyServer.GetFrequency() = %v, want %v", got, tt.want)
 			}
