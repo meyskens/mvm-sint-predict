@@ -108,7 +108,7 @@ func (c *childrenCountOptions) RunE(cmd *cobra.Command, args []string) error {
 	}
 
 	for _, count := range reply.Counts {
-		fmt.Printf("%s %d", count.GetGender(), count.GetCount())
+		fmt.Printf("%s %d: %d\n", count.GetGender(), count.GetAge(), count.GetCount())
 	}
 	return nil
 }
