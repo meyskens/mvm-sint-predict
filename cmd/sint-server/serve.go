@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/golang/glog"
 
@@ -49,8 +52,23 @@ func (s *serveCmdOptions) RunE(cmd *cobra.Command, args []string) error {
 	grpcSrv := grpc.NewServer()
 	srv := server.NewSintReplyServer()
 	pb.RegisterSintServer(grpcSrv, srv)
-	if err := grpcSrv.Serve(lis); err != nil {
-		return fmt.Errorf("failed to serve: %v", err)
+
+	errors := make(chan error, 1)
+	go func() {
+		if err := grpcSrv.Serve(lis); err != nil {
+			errors <- fmt.Errorf("failed to serve: %v", err)
+		}
+	}()
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	select {
+	case <-sigs:
+		grpcSrv.GracefulStop()
+		break
+	case err := <-errors:
+		return err
+		break
 	}
 
 	return nil
