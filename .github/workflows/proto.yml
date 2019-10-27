@@ -18,8 +18,8 @@ jobs:
 
     - name: Install gRPC
       run: |
-        go get -u google.golang.org/grpc
-        go get -u github.com/golang/protobuf/protoc-gen-go   
+        go install google.golang.org/grpc
+        go install github.com/golang/protobuf/protoc-gen-go   
     - name: Install protoc
       run : |
         PROTOC_ZIP=protoc-3.7.1-linux-x86_64.zip
